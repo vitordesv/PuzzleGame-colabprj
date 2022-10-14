@@ -14,6 +14,4 @@ public static class scrVariaveis
   public static bool segurarcaixa;
   //chaves para abir porta
   public static int chaves;
-  public static bool refletir;
-  
 }
