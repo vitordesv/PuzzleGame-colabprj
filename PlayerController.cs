@@ -58,8 +58,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        //VariaveisGlobais.itemAtivo = false;
-        //VariaveisGlobais.ativado = false;
         scrVariaveis.item=false;
         scrVariaveis.ativado=false;
         scrVariaveis.pegavel=false;
