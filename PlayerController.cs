@@ -71,31 +71,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Segurar();
-
-        #region Coments
-        //item
-        //item.SetActive(VariaveisGlobais.itemAtivo);
-
-        // if (transform.position.x > 9.5f || transform.position.x < -9.5f || transform.position.y < -5.5f)
-        // {
-        //     transform.position = playerSpawn;
-        // }
-
-
-        // if (Input.GetKeyDown(KeyCode.F) && scrVariaveis.pegavel || Input.GetKeyDown(KeyCode.F) && scrVariaveis.segurarcaixa)
-        // {
-        //     scrVariaveis.segurarcaixa = true;
-        //     japegou++;
-        //     Debug.Log("ja pegou" + japegou);
-
-        // }
-        // if (Input.GetKeyDown(KeyCode.F) && japegou==2 && scrVariaveis.segurarcaixa)
-        // {
-        //     scrVariaveis.segurarcaixa=false;
-        //     japegou=0;
-        //     Debug.Log("Solto");
-        // }
-        #endregion
     }
 
     void Segurar()
@@ -105,7 +80,6 @@ public class PlayerController : MonoBehaviour
             scrVariaveis.segurarcaixa = true;
             japegou++;
             Debug.Log("ja pegou" + japegou);
-            
         }
         if (segurarPressed && japegou==2 && scrVariaveis.segurarcaixa)
         {
@@ -132,10 +106,9 @@ public class PlayerController : MonoBehaviour
         if (players.Length > 1) Destroy(players[1]);
     }
 
-        void encontraPosini(){
-
+    void encontraPosini()
+    {
         //"spawn" do player em cada cena após a transi��o
         transform.position = GameObject.FindWithTag("Posini").transform.position;
-
     }
 }
