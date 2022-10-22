@@ -8,12 +8,12 @@ public class PlayerSysCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Plataforma"))
+        if (collision.gameObject.layer == 3)
             playerContrlSCRIPT.isGrounded = true;
 
         if (collision.gameObject.tag == "Item")
         {
-            Debug.Log("É ISSO!");
+            Debug.Log("Ã‰ ISSO!");
             Destroy(collision.gameObject);
             scrVariaveis.item = true;
         }
@@ -21,8 +21,7 @@ public class PlayerSysCollision : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Plataforma"))
+        if (collision.gameObject.layer == 3)
             playerContrlSCRIPT.isGrounded = false;
     }
-
 }
