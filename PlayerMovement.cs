@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        //Set velocidade em X (horizontal)
         if (playerContrlSCRIPT.standingCollider.enabled || !scrVariaveis.segurarcaixa)
             playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed, playerContrlSCRIPT.rb.velocity.y, 0);
         else
@@ -55,23 +56,10 @@ public class PlayerMovement : MonoBehaviour
     //Virar Sprite do player
     internal void Flip()
     {
-        Vector3 scale = transform.localScale;
-
         if (playerContrlSCRIPT.moveinput < 0) playerContrlSCRIPT.facingR = false;
         if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
 
-        if (!scrVariaveis.segurarcaixa)
-        {
-            if (playerContrlSCRIPT.facingR == true && transform.localScale.x < 0)
-            {
-                scale.x *= -1;
-                transform.localScale = scale;
-            }
-            if (playerContrlSCRIPT.facingR == false && transform.localScale.x > 0)
-            {
-                scale.x *= -1;
-                transform.localScale = scale;
-            }
-        }
+        if (playerContrlSCRIPT.facingR) playerContrlSCRIPT.spriteRenderer.flipX = false;
+        else playerContrlSCRIPT.spriteRenderer.flipX = true;
     }
 }
