@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     #region Components & Classes
     internal Rigidbody2D rb;
     [SerializeField] internal LayerMask groundLayer;
+    internal SpriteRenderer spriteRenderer;
 
     public GameObject[] players; //GameObject array para corrigir bugs da transição de cena 
     //private Vector3 playerSpawn; //Spawnpoint do player
@@ -25,12 +26,12 @@ public class PlayerController : MonoBehaviour
 
     #region Serialized & Normal vars
     //Serialized
-    [SerializeField] internal float speed;
-    [SerializeField] internal float jumpForce;
-    [SerializeField] internal float moveinput;
+    [SerializeField] internal float speed = 10;
+    [SerializeField] internal float jumpForce = 15;
     [SerializeField] internal float gravityDown = 6;
     [SerializeField] internal float gravityUp = 4;
     //Variáveis normais
+    internal float moveinput;
     internal bool isGrounded;
     internal bool facingR = true; //Flip
     internal int japegou = 0; //verifica se ja pegou caixa
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         scrVariaveis.item=false;
         scrVariaveis.ativado=false;
