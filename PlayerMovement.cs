@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!crouchFlag)
         {
-            if (Physics2D.OverlapCircle(playerContrlSCRIPT.overheadCollider.position, playerContrlSCRIPT.overheadRadius, playerContrlSCRIPT.groundLayer))
+            if (Physics2D.OverlapCircle(playerContrlSCRIPT.overheadCheck.position, playerContrlSCRIPT.overheadRadius, playerContrlSCRIPT.groundLayer))
             {
                 crouchFlag = true;
             }
