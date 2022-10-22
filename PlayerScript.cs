@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
 
     //agachar
     [SerializeField] internal Collider2D standingCollider;
-    [SerializeField] internal Transform overheadCollider;
+    [SerializeField] internal Transform overheadCheck;
     #endregion
 
     #region Serialized & Normal vars
