@@ -5,12 +5,6 @@ using UnityEngine;
 //Script que contém todos os atributos do jogador
 public class PlayerScript : MonoBehaviour
 {
-    #region SUB-SCRIPTS
-    [SerializeField] internal PlayerInput playerInputSCRIPT;
-    [SerializeField] internal PlayerMovement playerMoveSCRIPT;
-    [SerializeField] internal PlayerSysCollision playerCollideSCRIPT;
-    #endregion
-
     #region Components & Classes
     internal Rigidbody2D rb;
     [SerializeField] internal LayerMask groundLayer;
