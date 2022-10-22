@@ -22,10 +22,10 @@ public class PlayerScript : MonoBehaviour
     //Serialized
     [SerializeField] internal float speed = 10;
     [SerializeField] internal float jumpForce = 15;
-    [SerializeField] internal float moveinput;
     [SerializeField] internal float gravityDown = 6;
     [SerializeField] internal float gravityUp = 4;
     //Variáveis normais
+    internal float moveinput;
     internal bool isGrounded;
     internal bool facingR = true; //Flip
     internal int japegou = 0; //verifica se ja pegou caixa
