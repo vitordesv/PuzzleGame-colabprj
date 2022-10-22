@@ -8,9 +8,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed, playerContrlSCRIPT.rb.velocity.y, 0);
-        if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
-        else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;
+        if (playerContrlSCRIPT.standingCollider.enabled || !scrVariaveis.segurarcaixa)
+            playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed, playerContrlSCRIPT.rb.velocity.y, 0);
+        else
+            playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed * playerContrlSCRIPT.crouchSpeedModifier, playerContrlSCRIPT.rb.velocity.y, 0);
+        /* if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
+         else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;*/
 
         Flip();
         Jump();
@@ -26,7 +29,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerContrlSCRIPT.jumpBuffer && playerContrlSCRIPT.isGrounded && !scrVariaveis.segurarcaixa)
         {
-            playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.rb.velocity.x, playerContrlSCRIPT.jumpForce, 0);
+            if (playerContrlSCRIPT.standingCollider.enabled)
+            {
+                playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.rb.velocity.x, playerContrlSCRIPT.jumpForce, 0);
+            }
+            playerContrlSCRIPT.jumpBuffer = false;
         }
 
         playerContrlSCRIPT.jumpBuffer = false;
