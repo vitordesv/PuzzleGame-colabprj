@@ -35,8 +35,6 @@ public class PlayerMovement : MonoBehaviour
             }
             playerContrlSCRIPT.jumpBuffer = false;
         }
-
-        playerContrlSCRIPT.jumpBuffer = false;
     }
 
     //agachar
