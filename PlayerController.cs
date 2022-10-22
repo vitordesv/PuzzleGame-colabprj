@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Esse script contém as váriaveis de movimento do jogador assim como seus inputs, tem funções agachar e pular
+//Script que contém todos os atributos do jogador
 public class PlayerController : MonoBehaviour
 {
     #region SUB-SCRIPTS
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] internal LayerMask groundLayer;
 
     public GameObject[] players; //GameObject array para corrigir bugs da transição de cena 
-    private Vector3 playerSpawn; //Spawnpoint do player
+    //private Vector3 playerSpawn; //Spawnpoint do player
 
     //agachar
     [SerializeField] internal Collider2D standingCollider;
@@ -41,24 +41,18 @@ public class PlayerController : MonoBehaviour
     //agachar
     internal float crouchSpeedModifier = 0.5f;
     internal float overheadRadius = 0.2f;
-
-    //item
-    //public GameObject item;
-    //private bool itemAtivo;
     #endregion
 
 
     // Start is called before the first frame update, ou quando objeto é ativo, só é chamado se estiver ativo
     void Start()
     {
+        isGrounded = false;
         //função do unity que não destroy player na transição de cena
         DontDestroyOnLoad(gameObject);
-        playerSpawn = transform.position;
-        // if(scrVariaveis.renovar)Debug.Log("POIS BEM CHEGUEI");
-        // scrVariaveis.renovar=false;
-
-        isGrounded = false;
+        //playerSpawn = transform.position;
     }
+
     //ativado apenas uma vez antes do start
     void Awake()
     {
@@ -104,8 +98,6 @@ public class PlayerController : MonoBehaviour
         #endregion
     }
 
-//segurar
-
     void Segurar()
     {
         if (segurarPressed && scrVariaveis.pegavel || segurarPressed && scrVariaveis.segurarcaixa)
@@ -129,9 +121,8 @@ public class PlayerController : MonoBehaviour
         return raycastHit.collider != null;
     }*/
 
-
-    private void OnLevelWasLoaded(int level) {
-
+    private void OnLevelWasLoaded(int level) 
+    {
         encontraPosini();//encontra o spawn do player na cena
 
         //liga o GameObject array ao elemento no unity com a tag "Player"
@@ -139,7 +130,6 @@ public class PlayerController : MonoBehaviour
 
         //destroy as c�pias do player geradas pela transi��o de cena
         if (players.Length > 1) Destroy(players[1]);
-    
     }
 
         void encontraPosini(){
@@ -148,48 +138,4 @@ public class PlayerController : MonoBehaviour
         transform.position = GameObject.FindWithTag("Posini").transform.position;
 
     }
-
-//Colisões
-
-        /*if(collision.gameObject.tag == "Receptor" && VariaveisGlobais.itemAtivo){
-
-                Debug.Log("ATIVADO GARAI");
-                VariaveisGlobais.itemAtivo = false;
-                VariaveisGlobais.ativado = true;
-
-        } */
-    
-
-
-    /*
-    void OnCollisionEnter2D(Collision2D collide){
-
-        if(collide.gameObject.tag == "Porta" && VariaveisGlobais.ativado){
-
-                Destroy(collide.gameObject);
-
-            }
-
-         //abrir porta
-         if(collide.gameObject.tag == "Porta" && scrVariaveis.ativado)
-        {   
-            //fazer animação
-            //ficar trigger pra entrar na parede
-            //collision.gameObject.setActive(false);
-            Destroy(collide.gameObject);
-        }
-
-    }
-    */
-    //void Raycast()
-
-    /*private void OnTriggerEnter2D(Collider2D collision){
-
-        if(collision.gameObject.CompareTag("Item")){
-
-            Debug.Log("FUNFOU!");
-
-        }
-
-    }*/
 }
