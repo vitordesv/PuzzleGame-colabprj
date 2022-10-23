@@ -56,10 +56,15 @@ public class PlayerMovement : MonoBehaviour
     //Virar Sprite do player
     internal void Flip()
     {
-        if (playerContrlSCRIPT.moveinput < 0) playerContrlSCRIPT.facingR = false;
-        if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
-
-        if (playerContrlSCRIPT.facingR) playerContrlSCRIPT.spriteRenderer.flipX = false;
-        else playerContrlSCRIPT.spriteRenderer.flipX = true;
+        if (playerContrlSCRIPT.moveinput < 0)
+        {
+            playerContrlSCRIPT.facingR = false;
+            playerContrlSCRIPT.spriteRenderer.flipX = true;
+        }
+        else if (playerContrlSCRIPT.moveinput > 0) 
+        {
+            playerContrlSCRIPT.facingR = true;
+            playerContrlSCRIPT.spriteRenderer.flipX = false;
+        }
     }
 }
