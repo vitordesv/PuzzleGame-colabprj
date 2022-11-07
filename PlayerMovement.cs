@@ -28,9 +28,9 @@ public class PlayerMovement : MonoBehaviour
     //Pular
     internal void Jump()
     {
-        if (playerContrlSCRIPT.jumpBuffer && playerContrlSCRIPT.isGrounded && !scrVariaveis.segurarcaixa)
+        if (playerContrlSCRIPT.jumpBuffer)
         {
-            if (playerContrlSCRIPT.standingCollider.enabled)
+            if (playerContrlSCRIPT.isGrounded && playerContrlSCRIPT.standingCollider.enabled && !scrVariaveis.segurarcaixa)
             {
                 playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.rb.velocity.x, playerContrlSCRIPT.jumpForce, 0);
             }
@@ -49,8 +49,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerContrlSCRIPT.isGrounded)
+        if (playerContrlSCRIPT.isGrounded) 
+        {
             playerContrlSCRIPT.standingCollider.enabled = !crouchFlag;
+
+            if (crouchFlag)
+                playerContrlSCRIPT.animator.SetBool("Crouch", true);
+            else
+                playerContrlSCRIPT.animator.SetBool("Crouch", false);
+        }
     }
 
     //Virar Sprite do player
