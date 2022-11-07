@@ -8,26 +8,23 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        playerContrlSCRIPT.moveinput = Input.GetAxisRaw("Horizontal");
-
-        //agachar
-        if (Input.GetButtonDown("Crouch"))
+        if (!MenuPausa.estáPausado)
         {
-            playerContrlSCRIPT.crouchPressed = true;
-        }
-        else if (Input.GetButtonUp("Crouch"))
-        {
-            playerContrlSCRIPT.crouchPressed = false;
-        }
+            playerContrlSCRIPT.moveinput = Input.GetAxisRaw("Horizontal");
 
-        //pular
-        if (Input.GetButtonDown("Jump"))
-        {
-            playerContrlSCRIPT.jumpBuffer = true;
-        }
+            //agachar
+            if (Input.GetButtonDown("Crouch"))
+                playerContrlSCRIPT.crouchPressed = true;
+            else if (Input.GetButtonUp("Crouch"))
+                playerContrlSCRIPT.crouchPressed = false;
 
-        //segurar
-        if (Input.GetKeyDown(KeyCode.F))
-            playerContrlSCRIPT.segurarPressed = true;
+            //pular
+            if (Input.GetButtonDown("Jump"))
+                playerContrlSCRIPT.jumpBuffer = true;
+
+            //segurar
+            if (Input.GetKeyDown(KeyCode.F))
+                playerContrlSCRIPT.segurarPressed = true;
+        }
     }
 }
