@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerContrlSCRIPT.isGrounded) 
+        if (playerContrlSCRIPT.isGrounded)
         {
             playerContrlSCRIPT.standingCollider.enabled = !crouchFlag;
 
