@@ -6,53 +6,42 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
     #region Components & Classes
-    internal Rigidbody2D rb;
-    [SerializeField] internal LayerMask groundLayer;
+    Rigidbody2D rb;
+    [SerializeField] LayerMask groundLayer;
     SpriteRenderer spriteRenderer;
-
-    public GameObject[] players; //GameObject array para corrigir bugs da transição de cena 
-    //private Vector3 playerSpawn; //Spawnpoint do player
+    Animator animator;
 
     //agachar
-    [SerializeField] internal Collider2D standingCollider;
-    [SerializeField] internal Transform overheadCheck;
+    [SerializeField] Collider2D standingCollider;
+    [SerializeField] Transform overheadCheck;
     #endregion
 
     #region Serialized & Normal vars
     //Serialized
-    [SerializeField] internal float speed = 10;
-    [SerializeField] internal float jumpForce = 15;
-    [SerializeField] internal float gravityDown = 6;
-    [SerializeField] internal float gravityUp = 4;
+    [SerializeField] float speed = 10;
+    [SerializeField] float jumpForce = 15;
+    [SerializeField] float gravityDown = 6;
+    [SerializeField] float gravityUp = 4;
     //Variáveis normais
-    internal float moveinput;
-    internal bool isGrounded;
-    internal bool facingR = true; //Flip
-    internal int japegou = 0; //verifica se ja pegou caixa
+    float inputX;
+    bool isGrounded;
+    bool facingR = true; //Flip
+    int japegou = 0; //verifica se ja pegou caixa
     //input
-    internal bool crouchPressed;
-    internal bool jumpBuffer;
-    internal bool segurarPressed;
+    bool crouchPressed;
+    bool jumpBuffer;
+    bool segurarPressed;
     //agachar
-    internal float crouchSpeedModifier = 0.5f;
-    internal float overheadRadius = 0.2f;
+    float crouchSpeedModifier = 0.5f;
+    float overheadRadius = 0.2f;
     #endregion
-
-
-    // Start is called before the first frame update, ou quando objeto é ativo, só é chamado se estiver ativo
-    void Start()
-    {
-        isGrounded = false;
-        //função do unity que não destroy player na transição de cena
-        DontDestroyOnLoad(gameObject);
-        //playerSpawn = transform.position;
-    }
 
     //ativado apenas uma vez antes do start
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         scrVariaveis.item=false;
         scrVariaveis.ativado=false;
@@ -61,17 +50,24 @@ public class PlayerScript : MonoBehaviour
         scrVariaveis.renovar=false;
     }
 
+    void Start()
+    {
+        isGrounded = false; //Set do valor inicial de isGrounded
+        //DontDestroyOnLoad(gameObject); //função do unity que não destroy player na transição de cena
+        //playerSpawn = transform.position;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        #region Movimento
         Segurar();
 
-        #region Movimento
         //Set velocidade em X (horizontal)
         if (standingCollider.enabled || !scrVariaveis.segurarcaixa)
-            rb.velocity = new Vector3(moveinput * speed, rb.velocity.y, 0);
+            rb.velocity = new Vector3(inputX * speed, rb.velocity.y, 0);
         else
-            rb.velocity = new Vector3(moveinput * speed * crouchSpeedModifier, rb.velocity.y, 0);
+            rb.velocity = new Vector3(inputX * speed * crouchSpeedModifier, rb.velocity.y, 0);
         /* if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
          else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;*/
 
@@ -80,23 +76,17 @@ public class PlayerScript : MonoBehaviour
         #endregion
 
         #region Input Saving
-        moveinput = Input.GetAxisRaw("Horizontal");
+        inputX = Input.GetAxisRaw("Horizontal");
 
         //agachar
         if (Input.GetButtonDown("Crouch"))
-        {
             crouchPressed = true;
-        }
         else if (Input.GetButtonUp("Crouch"))
-        {
             crouchPressed = false;
-        }
 
         //pular
         if (Input.GetButtonDown("Jump"))
-        {
             jumpBuffer = true;
-        }
 
         //segurar
         if (Input.GetKeyDown(KeyCode.F))
@@ -113,9 +103,9 @@ public class PlayerScript : MonoBehaviour
     //Pular
     internal void Jump()
     {
-        if (jumpBuffer && isGrounded && !scrVariaveis.segurarcaixa)
+        if (jumpBuffer)
         {
-            if (standingCollider.enabled)
+            if (standingCollider.enabled && isGrounded && !scrVariaveis.segurarcaixa)
             {
                 rb.velocity = new Vector3(rb.velocity.x, jumpForce, 0);
             }
@@ -128,24 +118,31 @@ public class PlayerScript : MonoBehaviour
     {
         if (!crouchFlag)
         {
-            if (Physics2D.OverlapCircle(overheadCollider.position, overheadRadius, groundLayer))
+            if (Physics2D.OverlapCircle(overheadCheck.position, overheadRadius, groundLayer))
             {
                 crouchFlag = true;
             }
         }
 
         if (isGrounded)
+        {
             standingCollider.enabled = !crouchFlag;
+
+            if (crouchFlag)
+                animator.SetBool("Crouch", true);
+            else
+                animator.SetBool("Crouch", false);
+        }
     }
 
     //Virar Sprite do player
     internal void Flip()
     {
-        if (moveinput < 0) facingR = false;
-        if (moveinput > 0) facingR = true;
+        if (inputX < 0) facingR = false;
+        else if (inputX > 0) facingR = true;
 
-        if (facingR) spriteRenderer.flipX = false; //transform.localRotation = new Quaternion(0, 0, 0, 0);
-        else spriteRenderer.flipX = true; //transform.localRotation = new Quaternion(0, 180, 0, 0); 
+        spriteRenderer.flipX = !facingR;    //transform.localRotation = new Quaternion(0, 0, 0, 0);   //Normal
+                                            //transform.localRotation = new Quaternion(0, 180, 0, 0); //Virado
     }
 
     void Segurar()
@@ -160,7 +157,7 @@ public class PlayerScript : MonoBehaviour
         {
             scrVariaveis.segurarcaixa=false;
             japegou=0;
-            Debug.Log("Solto");
+            Debug.Log("Soltou");
         }
     }
     #endregion
@@ -173,7 +170,7 @@ public class PlayerScript : MonoBehaviour
 
         if (collision.gameObject.tag == "Item")
         {
-            Debug.Log("É ISSO!");
+            //Debug.Log("É ISSO!");
             Destroy(collision.gameObject);
             scrVariaveis.item = true;
         }
@@ -186,27 +183,4 @@ public class PlayerScript : MonoBehaviour
     }
     #endregion
 
-
-    /*bool Grounded()
-    {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
-        return raycastHit.collider != null;
-    }*/
-
-    private void OnLevelWasLoaded(int level) 
-    {
-        encontraPosini();//encontra o spawn do player na cena
-
-        //liga o GameObject array ao elemento no unity com a tag "Player"
-        players = GameObject.FindGameObjectsWithTag("Player");
-
-        //destroy as c�pias do player geradas pela transi��o de cena
-        if (players.Length > 1) Destroy(players[1]);
-    }
-
-    void encontraPosini()
-    {
-        //"spawn" do player em cada cena após a transi��o
-        transform.position = GameObject.FindWithTag("Posini").transform.position;
-    }
 }
