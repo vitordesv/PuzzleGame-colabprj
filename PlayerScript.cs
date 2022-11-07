@@ -60,21 +60,6 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        #region Movimento
-        Segurar();
-
-        //Set velocidade em X (horizontal)
-        if (standingCollider.enabled || !scrVariaveis.segurarcaixa)
-            rb.velocity = new Vector3(inputX * speed, rb.velocity.y, 0);
-        else
-            rb.velocity = new Vector3(inputX * speed * crouchSpeedModifier, rb.velocity.y, 0);
-        /* if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
-         else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;*/
-
-        Flip();
-        Jump();
-        #endregion
-
         #region Input Saving
         inputX = Input.GetAxisRaw("Horizontal");
 
@@ -91,6 +76,20 @@ public class PlayerScript : MonoBehaviour
         //segurar
         if (Input.GetKeyDown(KeyCode.F))
             segurarPressed = true;
+        #endregion
+
+        #region Movimento
+        //Set velocidade em X (horizontal)
+        if (standingCollider.enabled || !scrVariaveis.segurarcaixa)
+            rb.velocity = new Vector3(inputX * speed, rb.velocity.y, 0);
+        else
+            rb.velocity = new Vector3(inputX * speed * crouchSpeedModifier, rb.velocity.y, 0);
+        /* if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
+         else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;*/
+
+        Flip();
+        Jump();
+        Segurar();
         #endregion
     }
 
