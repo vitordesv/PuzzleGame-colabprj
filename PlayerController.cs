@@ -17,9 +17,6 @@ public class PlayerController : MonoBehaviour
     internal SpriteRenderer spriteRenderer;
     internal Animator animator;
 
-    public GameObject[] players; //GameObject array para corrigir bugs da transição de cena 
-    //private Vector3 playerSpawn; //Spawnpoint do player
-
     //agachar
     [SerializeField] internal Collider2D standingCollider;
     [SerializeField] internal Transform overheadCheck;
@@ -63,52 +60,5 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         isGrounded = false; //Seta o valor inicial de isGrounded
-        //DontDestroyOnLoad(gameObject); //função do unity que não destroy player na transição de cena
-        //playerSpawn = transform.position;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Segurar();
-    }
-
-    void Segurar()
-    {
-        if (segurarPressed && scrVariaveis.pegavel || segurarPressed && scrVariaveis.segurarcaixa)
-        {
-            scrVariaveis.segurarcaixa = true;
-            japegou++;
-            Debug.Log("ja pegou" + japegou);
-        }
-        if (segurarPressed && japegou==2 && scrVariaveis.segurarcaixa)
-        {
-            scrVariaveis.segurarcaixa=false;
-            japegou=0;
-            Debug.Log("Soltou");
-        }
-    }
-    
-    /*bool Grounded()
-    {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
-        return raycastHit.collider != null;
-    }*/
-
-    /*private void OnLevelWasLoaded(int level) 
-    {
-        //encontraPosini();//encontra o spawn do player na cena
-
-        //liga o GameObject array ao elemento no unity com a tag "Player"
-        players = GameObject.FindGameObjectsWithTag("Player");
-
-        //destroy as c�pias do player geradas pela transi��o de cena
-        if (players.Length > 1) Destroy(players[1]);
-    }*/
-
-    /*void encontraPosini()
-    {
-        //"spawn" do player em cada cena após a transi��o
-        transform.position = GameObject.FindWithTag("Posini").transform.position;
-    }*/
 }
