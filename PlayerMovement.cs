@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
         Flip();
         Jump();
+        Segurar();
     }
 
     private void FixedUpdate()
@@ -63,15 +64,25 @@ public class PlayerMovement : MonoBehaviour
     //Virar Sprite do player
     internal void Flip()
     {
-        if (playerContrlSCRIPT.moveinput < 0)
+        if (playerContrlSCRIPT.moveinput < 0) playerContrlSCRIPT.facingR = false;
+        else if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
+
+        playerContrlSCRIPT.spriteRenderer.flipX = !playerContrlSCRIPT.facingR;
+    }
+
+    void Segurar()
+    {
+        if (playerContrlSCRIPT.segurarPressed && scrVariaveis.pegavel || playerContrlSCRIPT.segurarPressed && scrVariaveis.segurarcaixa)
         {
-            playerContrlSCRIPT.facingR = false;
-            playerContrlSCRIPT.spriteRenderer.flipX = true;
+            scrVariaveis.segurarcaixa = true;
+            playerContrlSCRIPT.japegou++;
+            Debug.Log("ja pegou" + playerContrlSCRIPT.japegou);
         }
-        else if (playerContrlSCRIPT.moveinput > 0) 
+        if (playerContrlSCRIPT.segurarPressed && playerContrlSCRIPT.japegou == 2 && scrVariaveis.segurarcaixa)
         {
-            playerContrlSCRIPT.facingR = true;
-            playerContrlSCRIPT.spriteRenderer.flipX = false;
+            scrVariaveis.segurarcaixa = false;
+            playerContrlSCRIPT.japegou = 0;
+            Debug.Log("Soltou");
         }
     }
 }
