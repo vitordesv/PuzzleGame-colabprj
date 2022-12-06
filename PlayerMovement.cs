@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,17 +8,21 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //Set velocidade em X (horizontal)
-        if (playerContrlSCRIPT.standingCollider.enabled || !scrVariaveis.segurarcaixa)
-            playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed, playerContrlSCRIPT.rb.velocity.y, 0);
+        if(playerContrlSCRIPT.standingCollider.enabled && !scrVariaveis.segurarcaixa)
+            playerContrlSCRIPT.rb.velocity= new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed, playerContrlSCRIPT.rb.velocity.y,0);
         else
-            playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed * playerContrlSCRIPT.crouchSpeedModifier, playerContrlSCRIPT.rb.velocity.y, 0);
-        /* if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
-         else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;*/
+        {
+            playerContrlSCRIPT.rb.velocity= new Vector3(playerContrlSCRIPT.moveinput * playerContrlSCRIPT.speed * playerContrlSCRIPT.crouchSpeedModifier, playerContrlSCRIPT.rb.velocity.y,0);
+            //Debug.Log("ANDANDO AGACHADO");
+        }
+
+        if (playerContrlSCRIPT.rb.velocity.y < 0) playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityDown;
+        else playerContrlSCRIPT.rb.gravityScale = playerContrlSCRIPT.gravityUp;
+        
+        playerContrlSCRIPT.animator.SetFloat("speed", Mathf.Abs(playerContrlSCRIPT.moveinput));
 
         Flip();
         Jump();
-        Segurar();
     }
 
     private void FixedUpdate()
@@ -31,12 +35,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerContrlSCRIPT.jumpBuffer)
         {
-            if (playerContrlSCRIPT.isGrounded && playerContrlSCRIPT.standingCollider.enabled && !scrVariaveis.segurarcaixa)
+            if (playerContrlSCRIPT.isGrounded && !scrVariaveis.segurarcaixa)
             {
-                playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.rb.velocity.x, playerContrlSCRIPT.jumpForce, 0);
-            }
-            playerContrlSCRIPT.jumpBuffer = false;
+                if (playerContrlSCRIPT.standingCollider.enabled)
+                {
+                    playerContrlSCRIPT.rb.velocity = new Vector3(playerContrlSCRIPT.rb.velocity.x, playerContrlSCRIPT.jumpForce, 0);
+                }
+            } 
         }
+        playerContrlSCRIPT.jumpBuffer = false;
     }
 
     //agachar
@@ -44,45 +51,46 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!crouchFlag)
         {
-            if (Physics2D.OverlapCircle(playerContrlSCRIPT.overheadCheck.position, playerContrlSCRIPT.overheadRadius, playerContrlSCRIPT.groundLayer))
+            if (Physics2D.OverlapCircle(playerContrlSCRIPT.overheadCollider.position, playerContrlSCRIPT.overheadRadius, playerContrlSCRIPT.groundLayer))
             {
                 crouchFlag = true;
             }
         }
 
-        if (playerContrlSCRIPT.isGrounded)
-        {
+        if (playerContrlSCRIPT.isGrounded && !scrVariaveis.segurarcaixa)
             playerContrlSCRIPT.standingCollider.enabled = !crouchFlag;
-
-            if (crouchFlag)
-                playerContrlSCRIPT.animator.SetBool("Crouch", true);
-            else
-                playerContrlSCRIPT.animator.SetBool("Crouch", false);
-        }
     }
 
     //Virar Sprite do player
     internal void Flip()
     {
+        //flip melhor
+        /*  
         if (playerContrlSCRIPT.moveinput < 0) playerContrlSCRIPT.facingR = false;
-        else if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
-
-        playerContrlSCRIPT.spriteRenderer.flipX = !playerContrlSCRIPT.facingR;
-    }
-
-    void Segurar()
-    {
-        if (playerContrlSCRIPT.segurarPressed && scrVariaveis.pegavel || playerContrlSCRIPT.segurarPressed && scrVariaveis.segurarcaixa)
+        if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
+        if (!scrVariaveis.segurarcaixa)
         {
-            scrVariaveis.segurarcaixa = true;
-            playerContrlSCRIPT.japegou++;
-            Debug.Log("ja pegou" + playerContrlSCRIPT.japegou);
-        }
-        if (playerContrlSCRIPT.segurarPressed && playerContrlSCRIPT.japegou == 2 && scrVariaveis.segurarcaixa)
+            if (playerContrlSCRIPT.facingR) playerContrlSCRIPT.spriteRenderer.flipX = false;
+            else playerContrlSCRIPT.spriteRenderer.flipX = true;
+        }   */
+        
+        Vector3 scale = transform.localScale;
+
+        if (playerContrlSCRIPT.moveinput < 0) playerContrlSCRIPT.facingR = false;
+        if (playerContrlSCRIPT.moveinput > 0) playerContrlSCRIPT.facingR = true;
+
+        if (!scrVariaveis.segurarcaixa)
         {
-            scrVariaveis.segurarcaixa = false;
-            playerContrlSCRIPT.japegou = 0;
-            Debug.Log("Soltou");
+            if (playerContrlSCRIPT.facingR == true && transform.localScale.x < 0)
+            {
+                scale.x *= -1;
+                transform.localScale = scale;
+            }
+            if (playerContrlSCRIPT.facingR == false && transform.localScale.x > 0)
+            {
+                scale.x *= -1;
+                transform.localScale = scale;
+            }
         }
     }
 }
