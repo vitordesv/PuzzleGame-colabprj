@@ -6,11 +6,12 @@ using UnityEngine.SceneManagement;
 public class MenuPausa : MonoBehaviour
 {
     [SerializeField] GameObject menuPausa;
-    public static  bool est·Pausado;
+    public static bool estaPausado;
 
     void Start()
     {
         menuPausa.SetActive(false);
+        estaPausado = false;
     }
 
     // Update is called once per frame
@@ -18,7 +19,7 @@ public class MenuPausa : MonoBehaviour
     {
         if (Input.GetButtonDown("Pausa"))
         {
-            if (est·Pausado)
+            if (estaPausado)
             {
                 ResumirJogo();
             }
@@ -33,14 +34,14 @@ public class MenuPausa : MonoBehaviour
     {
         menuPausa.SetActive(true);
         Time.timeScale = 0f;
-        est·Pausado = true;
+        estaPausado = true;
     }
 
     public void ResumirJogo()
     {
         menuPausa.SetActive(false);
         Time.timeScale = 1f;
-        est·Pausado = false;
+        estaPausado = false;
     }
 
     public void VoltarAoMenu()
